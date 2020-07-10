@@ -117,7 +117,7 @@ Add root user 0:0 to the fossidb-persisted
 # Starting Webknossos
   
 ```     
-PUBLIC_URI=https://connectomics.clps.brown.edu DOCKER_TAG=master docker-compose up webknossos-public brown-nginx_ms
+PUBLIC_URI=https://connectomics.clps.brown.edu DOCKER_TAG=master docker-compose up -d webknossos brown-nginx_ms
 ```
 
 ## Update Postgres DB Table with public URL
