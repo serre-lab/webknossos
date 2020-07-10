@@ -25,7 +25,7 @@ https://github.com/scalableminds/webknossos
 
 https://docs.webknossos.org/guides/installation
 
-etup of Webknossos Application
+# Setup of Webknossos Application
 
 A fully cloud- and browser-based 3D annotation tool for distributed large-scale data analysis in light- and electron-microscopy based Connectomics.
 Researchers can annotate MRI data online.
@@ -42,7 +42,7 @@ https://github.com/scalableminds/webknossos
 
 ## Server
 
-Redh Hat 7 server - pclpsserrewbcit1.services.brown.edu, running Docker.
+RedHat 7 server - pclpsserrewbcit1.services.brown.edu, running Docker.
 
 ##  Data Paths
 
