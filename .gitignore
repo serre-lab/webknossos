@@ -1,1 +1,3 @@
 persistent/*
+*.log
+connectomics.clps.brown.edu.key
