@@ -67,25 +67,21 @@ CIFS mount //files.brown.edu/CLPS$/CLPS_Serre_Lab/connectomics/cubed_mag1 to /me
 
 ## NGINX Setup
 
-Added the following to the docker-compose.yml from Webknossos.  This add a ssl reverse proxy.  The config and ssl certifiates are found under /data/webknossos/nginx path.
+Added the following to the docker-compose.yml from Webknossos.  This adds a ssl reverse proxy with mod_security for a web application firewall protection.  The config and ssl certifiates are found under /data/webknossos/nginx_ms path.
 
 ```
-  nginx:
-    image: nginx:latest
-    container_name: production_nginx
+  brown-nginx_ms:
+    image: really/nginx-modsecurity
+    container_name: production_nginx_ms
     volumes:
-      - ./nginx:/etc/nginx
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx/error_log.log:/etc/nginx/error_log.log
-      - ./nginx/cache/:/etc/nginx/cache
-      - ./nginx/connectomics.clps.brown.edu.crt:/etc/ssl/certs/connectomics.clps.brown.edu.crt
-      - ./nginx:/etc/ssl/certs
-      - ./nginx:/etc/ssl/private
-      - ./nginx/connectomics.clps.brown.edu.key:/etc/ssl/private/connectomics.clps.brown.edu.key
+      - ./nginx_ms/conf.d:/etc/nginx/conf.d:rw
+      - ./nginx_ms/connectomics.clps.brown.edu.crt:/etc/ssl/certs/connectomics.clps.brown.edu.crt
+      - ./nginx_ms:/etc/ssl/certs
+      - ./nginx_ms:/etc/ssl/private
+      - ./nginx_ms/connectomics.clps.brown.edu.key:/etc/ssl/private/connectomics.clps.brown.edu.key
+      - ./nginx_ms/modsec/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf:/usr/local/owasp-modsecurity-crs-3.0.0/rules/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf:rw
     ports:
       - 443:443
-    links:
-      - webknossos-public
 ```
 ## Updates to the docker-compose.yml file
       
