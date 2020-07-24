@@ -27,6 +27,7 @@ services:
 #      - ./data:/srv/webknossos/binaryData
       -  /media/data_cifs/pbtest:/srv/webknossos/binaryData/pbtest/
       -  /media/data_cifs:/media/data_cifs
+      -  ./webknossos/application.conf:/srv/webknossos/conf/application.conf
     environment:
       - POSTGRES_URL=jdbc:postgresql://postgres/webknossos
       - VIRTUAL_HOST=${PUBLIC_HOST}
