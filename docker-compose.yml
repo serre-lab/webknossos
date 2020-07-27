@@ -21,8 +21,10 @@ services:
       - -Dslick.db.url=jdbc:postgresql://postgres/webknossos
       - -Dapplication.insertInitialData=false
       - -Dapplication.authentication.enableDevAutoLogin=false
+      - -Dhttp.uri=https://${PUBLIC_HOST}
       - -Dtracingstore.publicUri=https://${PUBLIC_HOST}
       - -Ddatastore.publicUri=https://${PUBLIC_HOST}
+
     volumes:
 #      - ./data:/srv/webknossos/binaryData
       -  /media/data_cifs/pbtest:/srv/webknossos/binaryData/pbtest/
