@@ -24,6 +24,14 @@
             "certPath": "",
             "sourceType": "DockerStats",
             "pollInterval": 60000
+        },
+        {   "sourceType" : "LocalFile",
+            "name": "localfile-collector-container",
+            "pathExpression": "/var/lib/docker/containers/**/*.log",
+            "multilineProcessingEnabled": false,
+            "automaticDateParsing": true,
+            "forceTimeZone": false,
+            "category": "collector-container"
         }
    ]
 }

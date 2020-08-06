@@ -35,6 +35,7 @@ services:
       - VIRTUAL_HOST=${PUBLIC_HOST}
       - LETSENCRYPT_HOST=${PUBLIC_HOST}
     user: ${USER_UID:-1000}:${USER_GID:-1000}
+    restart: unless-stopped
 
   # Postgres
   postgres:
@@ -52,6 +53,7 @@ services:
       - "127.0.0.1:5432:5432"
     volumes:
       - "./persistent/postgres:/var/lib/postgresql/data/"
+    restart: unless-stopped
 
   psql:
     extends: postgres
@@ -73,6 +75,7 @@ services:
     volumes:
       - "./persistent/fossildb/data:/fossildb/data"
       - "./persistent/fossildb/backup:/fossildb/backup"
+    restart: unless-stopped
 
   # Redis
   redis:
@@ -88,6 +91,7 @@ services:
       timeout: 1s
       interval: 5s
       retries: 10
+    restart: unless-stopped
 
   # Nginx
   nginx:
@@ -120,6 +124,7 @@ services:
     container_name: production_nginx_ms
     volumes:
       - ./nginx_ms/conf.d:/etc/nginx/conf.d:rw
+      - ./nginx_ms/html:/etc/nginx/html:rw
       - ./nginx_ms/connectomics.clps.brown.edu.crt:/etc/ssl/certs/connectomics.clps.brown.edu.crt
       - ./nginx_ms:/etc/ssl/certs
       - ./nginx_ms:/etc/ssl/private
@@ -127,3 +132,19 @@ services:
       - ./nginx_ms/modsec/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf:/usr/local/owasp-modsecurity-crs-3.0.0/rules/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf:rw
     ports:
       - 443:443
+    restart: unless-stopped
+
+  brown-sumo:
+    image: sumologic/collector:latest
+    container_name: production_sumo
+    environment:
+      - SUMO_SOURCES_JSON=/sumo/sources.json
+      - SUMO_COLLECTOR_HOSTNAME=connectomics.clps.brown.edu
+      - SUMO_ACCESS_ID=suwpM2KrJg4alA
+      - SUMO_ACCESS_KEY=NlyxD1rEGLw7oFAKdv1FIWV8fByLfzEb4EWJOskqiuFdvbQvmsGRIHqsmknytF5Z
+    volumes: 
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /data/webknossos/sumo:/sumo
+    restart: unless-stopped
+
