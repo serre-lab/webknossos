@@ -27,8 +27,10 @@ services:
 
     volumes:
 #      - ./data:/srv/webknossos/binaryData
-      -  /media/data_cifs/pbtest:/srv/webknossos/binaryData/pbtest/
-      -  /media/data_cifs:/media/data_cifs
+#      -  /media/data_cifs/pbtest:/srv/webknossos/binaryData/pbtest/
+#      -  /media/data_cifs:/media/data_cifs
+      -  /webknossos/pbtest:/srv/webknossos/binaryData/pbtest/
+      -  /webknossos:/webknossos
       -  ./webknossos/application.conf:/srv/webknossos/conf/application.conf
     environment:
       - POSTGRES_URL=jdbc:postgresql://postgres/webknossos
@@ -148,3 +150,14 @@ services:
       - /data/webknossos/sumo:/sumo
     restart: unless-stopped
 
+  brown-sync:
+    build:
+      context: ./
+      dockerfile: Dockerfile_sync
+    container_name: production_brown_sync
+    volumes:
+      - /media/data_cifs:/src
+      - /webknossos:/dest
+      - ./run.sh:/script/run.sh
+    restart: unless-stopped
+      
