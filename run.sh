@@ -9,26 +9,47 @@ hostname=`hostname`
 FromLineOverride=YES
 EOF
 
-cat > /drew.txt << EOF
-To: drew_linsley@brown.edu
-From: connectomics@brown.edu
-Subject: Connectomics Sync Complete
 
-Connectomics Sync Complete
-EOF
-
-cat > /pb.txt << EOF
-To: pb@brown.edu
-From: connectomics@brown.edu
-Subject: Connectomics Sync Complete
-
-Connectomics Sync Complete
-EOF
+EMAIL=pb@brown.edu,drew_linsley@brown.edu
+set -o pipefail
 
 while true
 do
-[ -f /src/sync_me ] && ( rsync -avh --delete-before /src/ /dest && rm -f /src/sync_me )
-ssmtp drew_linsley@brown.edu < /drew.txt
-ssmtp pb@brown.edu < /pb.txt
-sleep 60
+
+  if [[ -f /src/delete_me  ]]
+  then
+    rm -rf /dest/merge_data_wkw/*  
+    rm -rf /src/delete_me
+    {
+        echo "Subject: Connectomics Delete "
+        echo " merge_data_wkw/* deleted " 
+    } | ssmtp -fconnectomics@brown.edu -Fconnectomics $EMAIL
+  fi
+
+  if [[ -f /src/sync_me && ! -f /src/syncrpt-fail ]]
+  then
+    rsync  -ah /src/ /dest --delete --log-file=/src/syncrpt
+    if [[ $? = 0 ]]
+    then
+      {
+        echo "Subject: Connectomics Sync Complete"
+        echo `grep ">" /src/syncrpt |wc -l` Files Synced
+        tail -1 /src/syncrpt
+      } | ssmtp -fconnectomics@brown.edu -Fconnectomics $EMAIL
+      rm -f /src/sync_me
+      mv /src/syncrpt /src/syncrpt-success
+      sleep 60
+    else
+      mv /src/syncrpt /src/syncrpt-fail
+      while true
+      do
+        {
+           echo "Subject: Connectomics Sync Failed"
+           tail -15 /src/syncrpt-fail
+        } | ssmtp -fconnectomics@brown.edu -Fconnectomics $EMAIL
+        sleep 7200
+      done
+    fi
+  fi
+
 done

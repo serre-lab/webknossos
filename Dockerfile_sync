@@ -1,4 +1,5 @@
 FROM alpine
 RUN apk update
 RUN apk add rsync
+RUN apk add ssmtp
 ENTRYPOINT /script/run.sh
