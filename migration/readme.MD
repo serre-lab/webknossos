@@ -5,8 +5,10 @@
 * Save all the sql between the releases 20.03 through 20.11 into a single file 
 * Store it under /data/webknossos/migrate/migrate_20.03_to_20.11.sql
 * Stop the webknossos container and remove it
-* run the migrate script, passing in the migrate_20.03_to_20.11.sql
-* download latest application.conf, update smtp settings, copy to /data/webknossos/webknossos folder https://github.com/scalableminds/webknossos/blob/master/conf/application.conf
+* run the migrate script `./migrate.sh /migrate_20.03_to_20.11.sql`
+* download latest application.conf https://github.com/scalableminds/webknossos/blob/master/conf/application.conf
+* update smtp settings, `host = mail-relay.brown.edu, port = 25`
+* save copy of /data/webknossos/webknossos/application.conf and copy new version in
 * Start webknossos 20.11.0 `DOCKER_TAG=20.11.0 docker-compose up -d webknossos`
 * Check webknossos logs
 
