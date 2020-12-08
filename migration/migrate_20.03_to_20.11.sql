@@ -2,14 +2,14 @@ START TRANSACTION;
 
 DROP VIEW webknossos.dataSets_;
 
-ALTER TABLE webknossos.dataSets ADD COLUMN sourceDefaultConfiguration JSONB;
+-- ALTER TABLE webknossos.dataSets ADD COLUMN sourceDefaultConfiguration JSONB;
 
 CREATE VIEW webknossos.dataSets_ AS SELECT * FROM webknossos.dataSets WHERE NOT isDeleted;
 
-ALTER TABLE webknossos.dataSets ADD CONSTRAINT sourceDefaultConfigurationIsJsonObject CHECK(jsonb_typeof(sourceDefaultConfiguration) = 'object');
+-- ALTER TABLE webknossos.dataSets ADD CONSTRAINT sourceDefaultConfigurationIsJsonObject CHECK(jsonb_typeof(sourceDefaultConfiguration) = 'object');
 
-ALTER TABLE webknossos.dataSet_layers ADD COLUMN defaultViewConfiguration JSONB;
-ALTER TABLE webknossos.dataSet_layers ADD CONSTRAINT defaultViewConfigurationIsJsonObject CHECK(jsonb_typeof(defaultViewConfiguration) = 'object');
+-- ALTER TABLE webknossos.dataSet_layers ADD COLUMN defaultViewConfiguration JSONB;
+-- ALTER TABLE webknossos.dataSet_layers ADD CONSTRAINT defaultViewConfigurationIsJsonObject CHECK(jsonb_typeof(defaultViewConfiguration) = 'object');
 
 -- Update alpha value of segmentation layer based on segmentationOpacity
 UPDATE webknossos.datasets
@@ -93,3 +93,22 @@ UPDATE webknossos.releaseInformation SET schemaVersion = 55;
 COMMIT TRANSACTION;
 
 
+START TRANSACTION;
+
+CREATE TABLE webknossos.jobs(
+  _id CHAR(24) PRIMARY KEY DEFAULT '',
+  _owner CHAR(24) NOT NULL,
+  command TEXT NOT NULL,
+  commandArgs JSONB NOT NULL,
+  celeryJobId CHAR(36) NOT NULL,
+  celeryInfo JSONB NOT NULL,
+  created TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  isDeleted BOOLEAN NOT NULL DEFAULT false
+);
+
+
+CREATE VIEW webknossos.jobs_ AS SELECT * FROM webknossos.jobs WHERE NOT isDeleted;
+
+UPDATE webknossos.releaseInformation SET schemaVersion = 56;
+
+COMMIT TRANSACTION;

@@ -1,7 +1,7 @@
 # How to Upgrade Webknoss Application
 
 
-* Visit https://github.com/scalableminds/webknossos/blob/95f0a0612a65169d3d67a80d0cba561aba6c368e/MIGRATIONS.released.md
+* Visit https://github.com/scalableminds/webknossos/blob/master/MIGRATIONS.released.md
 * Save all the sql between the releases 20.03 through 20.11 into a single file 
 * Store it under /data/webknossos/migrate/migrate_20.03_to_20.11.sql
 * Stop the webknossos container and remove it
