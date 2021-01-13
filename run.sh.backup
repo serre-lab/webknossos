@@ -16,17 +16,6 @@ set -o pipefail
 while true
 do
 
-  if [[ -f /src/restore_me  ]]
-  then
-    rm -rf /src/merge_data_wkw/*  
-    rsync  -ah /src/.merge_data_wkw_121220/ /src/merge_data_wkw
-    rm -rf /src/restore_me
-    {
-        echo "Subject: Connectomics Restore"
-        echo " merge_data_wkw restore to 12/12/2020" 
-    } | ssmtp -fconnectomics@brown.edu -Fconnectomics $EMAIL
-  fi
-  
   if [[ -f /src/delete_me  ]]
   then
     rm -rf /dest/merge_data_wkw/*  
